@@ -1,6 +1,9 @@
 # Movie Recommending System using Spark
 
-### Requirements
+TODO description
+
+## Requirements and installation
+
 Please see requirements.txt.
 To install these packages, use the following command in a <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/" target="_blank"> virtualenv</a>.
 ```bash
@@ -24,8 +27,14 @@ $ ./bin/pyspark
 ```
 from spark-1.6.1/
 <br />
-### To download the dataset that will be used, run the following script
+To download the dataset that will be used, run the following script
 ```bash
 $ python download_dataset.py
 ```
+
+## Usage
+TODO Write instructions and an example.
+
+## Tests
+TODO
 
