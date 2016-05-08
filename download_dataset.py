@@ -2,6 +2,7 @@ import os
 import urllib 
 import zipfile 
 
+
 def download_datasets():
     datasets_path = os.path.join('.', 'datasets')
 
@@ -11,8 +12,8 @@ def download_datasets():
     complete_dataset_path = os.path.join(datasets_path, 'ml-latest.zip')
     small_dataset_path = os.path.join(datasets_path, 'ml-latest-small.zip')
 
-    small_f = urllib.urlretrieve (small_dataset_url, small_dataset_path)
-    complete_f = urllib.urlretrieve (complete_dataset_url, complete_dataset_path)
+    urllib.urlretrieve (small_dataset_url, small_dataset_path)
+    urllib.urlretrieve (complete_dataset_url, complete_dataset_path)
 
     with zipfile.ZipFile(small_dataset_path, "r") as z:
         z.extractall(datasets_path)
