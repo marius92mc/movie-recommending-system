@@ -10,8 +10,9 @@ Download Spark v1.6.1 from <a href="http://spark.apache.org/downloads.html"> her
 ```bash
 $ tar -xf <name_of_spark_archive>.tar
 ```
-Follow instructions from spark-1.6.1/README.md file to build and install.
-Environment variables in your ~/.bash_profile for OS X or ~/.bashrc file.
+Follow instructions from spark-1.6.1/README.md to build and install.
+<br />
+Environment variables in your ~/.bash_profile for OS X or ~/.bashrc for Linux.
 ```bash
 export SPARK_HOME=~/path/to/spark-1.6.1
 export PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
