@@ -51,7 +51,8 @@ $ python download_dataset.py
 
 ## Usage
 TODO Write <b>full</b> instructions and an example. 
-### 1. Starting the Spark Master and Workers. 
+### 1. Starting the Spark Master and Workers.
+From path/to/spark type
 ```bash
 $ sbin/start-master.sh
 $ sbin/start-slaves.sh
