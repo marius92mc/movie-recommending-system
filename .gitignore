@@ -1,6 +1,14 @@
 .DS_Store
+
 venv/
+
 *.pyc
+
 tests/
 datasets/
+
 .idea/
+
+log
+stdout
+stderr
