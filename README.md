@@ -72,13 +72,16 @@ $ sh path/to/spark/bin/spark-submit \
            server.py > stdout 2> stderr
 ```
 Where server_name is yosemite/ubuntu/localhost if it's running locally. 
+<br />
 Logs can be seen in the above provided files.
 ```bash
 $ tail -f stdout
 $ tail -f stderr
 ```
 By default, as it is mentioned in <i>server.py</i>, CherryPy will use 
-port 5433. Change it from the same file if it is busy.
+port 5433. 
+
+Change it from the same file if it is busy.
 ### 3. <b>Operations on the constructed model</b>
 - <b>POSTing new ratings</b> to the model
 ```bash
@@ -86,12 +89,15 @@ $ curl --data-binary @user_ratings.file http://0.0.0.0:5433/<user_id>/ratings
 ```
 where user_id is 0 by default representing a total new user, 
 outside from those mentioned in the dataset.
+<br />
 POSTs user_id's ratings from <i>user_ratings.file</i>, where 
 every line has movie_id,rating.
+<br />
 Will start some computations and end up with an output representing 
 the ratings that has been submitted as a list of lists. 
 In the server output window you will see the actual Spark computation 
 output together with CherryPy's output messages about HTTP requests.
+<br />
 Output represents ratings as - (user_id, movie_id, rating)
 rating awarded by the user from user_ratings.file.
 - [ ] <b>GETing best recommendations</b>
@@ -99,9 +105,12 @@ rating awarded by the user from user_ratings.file.
 $ curl http://0.0.0.0:5433/<user_id>/ratings/top/<num_movies>
 ```
 or in browser
+<br />
 http://0.0.0.0:5433/user_id/ratings/top/num_movies
+<br />
 Example
 http://0.0.0.0:5433/0/ratings/top/10
+<br />
 Will present the best num_movies recommendations for user with user_id.
 - <b>GETing individual ratings</b>
 ```bash
@@ -109,8 +118,10 @@ $ curl http://0.0.0.0:5433/<user_id>/ratings/<movie_id>
 ```
 or in browser
 http://0.0.0.0:5433/user_id/ratings/movie_id
+<br />
 Example 
 http://0.0.0.0:5433/0/ratings/500
+<br />
 Will get the predicted movie rating, from the model, of 
 user_id for movie_id. 
 
