@@ -74,9 +74,15 @@ $ sh path/to/spark/bin/spark-submit \
            --num-executors 2 \
            --total-executor-cores 2 \
            --executor-memory 2g \
-           server.py > stdout 2> stderr
+           server.py [options] > stdout 2> stderr
 ```
-Where server_name is yosemite/ubuntu/localhost if it's running locally. 
+where server_name is yosemite/ubuntu/localhost if it's running locally. 
+
+Options, all <b>optional</b>, include:
+
+    --dataset <name>
+      Specify a dataset, e.g. "ml-latest" or "ml-latest-small". 
+      If omitted, defaults to "ml-latest".
 
 Logs can be seen in the above provided files.
 ```bash

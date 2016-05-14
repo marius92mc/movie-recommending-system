@@ -1,5 +1,6 @@
 import cherrypy
 import os
+import sys
 from paste.translogger import TransLogger
 from app import create_app
 from pyspark import SparkContext, SparkConf
@@ -41,12 +42,26 @@ def run_server(app):
     cherrypy.engine.block()
 
 
-if __name__ == "__main__":
+def main(argv):
+    ml_latest = "ml-latest"
+    ml_latest_small = "ml-latest-small"
+    dataset = ml_latest
+
+    if len(argv) > 1:
+        if argv[0] == "--dataset":
+            if argv[1] == ml_latest or argv[1] == ml_latest_small:
+                dataset = argv[1]
+    print "Using ", dataset, " dataset..."
+
     # Init spark context and load libraries
     sc = init_spark_context()
-    dataset_path = os.path.join('datasets', 'ml-latest')
+    dataset_path = os.path.join('datasets', dataset)
     app = create_app(sc, dataset_path)
 
     # start web server
     run_server(app)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
 
