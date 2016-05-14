@@ -31,6 +31,8 @@ Copy <i>spark-env.sh</i>, <i>spark-defaults.conf</i> and <i>slaves</i> files
 from <i>spark_utils/</i> to <i>path/to/spark/conf/</i>. 
 - <i>spark-env.sh</i> 
        - settings regarding the master node, like number of workers if manages, etc.
+         Note: Edit the SCALA_HOME, SPARK_WORKER_DIR environment variables 
+         to your local needs. 
 - <i>spark-defaults.conf</i> 
        - settings regarding the workers. 
           Any values specified as flags or in the properties file will be 
