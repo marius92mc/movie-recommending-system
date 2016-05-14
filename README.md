@@ -14,7 +14,7 @@ Download Spark v1.6.1 from <a href="http://spark.apache.org/downloads.html"> her
 $ tar -xf <name_of_spark_archive>.tar
 ```
 Follow instructions from spark-1.6.1/README.md to build and install.
-<br />
+
 Environment variables in your ~/.bash_profile for OS X or ~/.bashrc for Linux.
 ```bash
 export SPARK_HOME=~/path/to/spark-1.6.1
@@ -26,7 +26,7 @@ Verify it was successfully installed by running
 $ ./bin/pyspark
 ```
 from spark-1.6.1/
-<br />
+
 Copy <i>spark-env.sh</i>, <i>spark-defaults.conf</i> and <i>slaves</i> files 
 from <i>spark_utils/</i> to <i>path/to/spark/conf/</i>. 
 - <i>spark-env.sh</i> 
@@ -43,8 +43,8 @@ from <i>spark_utils/</i> to <i>path/to/spark/conf/</i>.
           then options in the spark-defaults.conf file.
 - <i>slaves</i> 
        - addresses of the workers.
-<br />
-To download the dataset that will be used, run the following script
+
+To download the <b>dataset</b> that will be used, run the following script
 ```bash
 $ python download_dataset.py
 ```
@@ -60,8 +60,10 @@ or
 ```bash
 $ sbin/start-all.sh
 ```
-See Spark stats via UI at 
-http://localhost:8080
+See Spark stats via UI at
+ 
+http://localhost:8080 
+
 http://localhost:4040
 ### 2. Sending the Python sources to Spark and run them
 Run from project directory, but not from virtualenv, the following
@@ -74,7 +76,7 @@ $ sh path/to/spark/bin/spark-submit \
            server.py > stdout 2> stderr
 ```
 Where server_name is yosemite/ubuntu/localhost if it's running locally. 
-<br />
+
 Logs can be seen in the above provided files.
 ```bash
 $ tail -f stdout
@@ -82,22 +84,19 @@ $ tail -f stderr
 ```
 By default, as it is mentioned in <i>server.py</i>, CherryPy will use 
 port 5433. 
-
 Change it from the same file if it is busy.
 ### 3. <b>Operations on the constructed model</b>
 - <b>POSTing new ratings</b> to the model
 ```bash
-$ curl --data-binary @user_ratings.file http://0.0.0.0:5433/<user_id>/ratings
+$ curl --data-binary @user_ratings/user_ratings.file http://0.0.0.0:5433/<user_id>/ratings
 ```
 where user_id is 0 by default representing a total new user, 
 outside from those mentioned in the dataset.
 
 POSTs user_id's ratings from <i>user_ratings.file</i>, where 
-every line has movie_id,rating.
-
+every line has movie_id,rating. <br />
 Will start some computations and end up with an output representing 
-the ratings that has been submitted as a list of lists. 
-
+the ratings that has been submitted as a list of lists. <br />
 In the server output window you will see the actual Spark computation 
 output together with CherryPy's output messages about HTTP requests.
 
@@ -107,12 +106,15 @@ rating awarded by the user from user_ratings.file.
 ```bash
 $ curl http://0.0.0.0:5433/<user_id>/ratings/top/<num_movies>
 ```
-or in browser
+or in browser 
 
 http://0.0.0.0:5433/user_id/ratings/top/num_movies
 
 Example
-
+```bash
+$ curl http://0.0.0.0:5433/0/ratings/top/10
+$ curl http://0.0.0.0:5433/3/ratings/top/10
+```
 http://0.0.0.0:5433/0/ratings/top/10
 
 Will present the best num_movies recommendations for user with user_id.
@@ -121,10 +123,17 @@ Will present the best num_movies recommendations for user with user_id.
 $ curl http://0.0.0.0:5433/<user_id>/ratings/<movie_id>
 ```
 or in browser
+
 http://0.0.0.0:5433/user_id/ratings/movie_id
 
-Example 
+Example
+```bash
+curl http://0.0.0.0:5433/0/ratings/500
+curl http://0.0.0.0:5433/3/ratings/500
+```
 http://0.0.0.0:5433/0/ratings/500
+
+http://0.0.0.0:5433/1/ratings/500
 
 Will get the predicted movie rating, from the model, of 
 user_id for movie_id. 
