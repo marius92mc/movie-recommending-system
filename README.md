@@ -52,7 +52,7 @@ $ python download_dataset.py
 ```
 
 ## Usage
-[ ] Write <b>full</b> instructions and an example. 
+- [ ] Write <b>full</b> instructions and an example. 
 
 Activate the created virtualenv directory.
 ```bash
