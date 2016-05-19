@@ -4,6 +4,8 @@ TODO description
 
 ## Requirements and installation
 
+It is highly recommended to use <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/" target="_blank">virtualenv</a>. 
+
 Please see requirements.txt.
 To install these packages, use the following command in a <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/" target="_blank"> virtualenv</a>.
 ```bash
@@ -50,7 +52,12 @@ $ python download_dataset.py
 ```
 
 ## Usage
-TODO Write <b>full</b> instructions and an example. 
+[ ] Write <b>full</b> instructions and an example. 
+
+Activate the created virtualenv directory.
+```bash
+source name_of_virtualenv_directory/bin/activate
+```
 ### 1. Starting the Spark Master and Workers.
 From path/to/spark type
 ```bash
@@ -61,13 +68,24 @@ or
 ```bash
 $ sbin/start-all.sh
 ```
+
+Similar, to stop the Master and Workers. 
+```bash
+$ sbin/stop-master.sh
+$ sbin/stop-slaves.sh
+```
+or 
+```bash
+$ sbin/stop-all.sh
+```
+
 See Spark stats via UI at
  
 http://localhost:8080 
 
 http://localhost:4040
 ### 2. Sending the Python sources to Spark and run them
-Run from project directory, but not from virtualenv, the following
+Run from project directory, the following
 ```bash
 $ sh path/to/spark/bin/spark-submit \
            --master spark://<server_name/server_ip>:7077 \
@@ -109,7 +127,7 @@ output together with CherryPy's output messages about HTTP requests.
 
 Output represents ratings as - (user_id, movie_id, rating)
 rating awarded by the user from user_ratings.file.
-- [ ] <b>GETing best recommendations</b>
+- <b>GETing best recommendations</b>
 ```bash
 $ curl http://0.0.0.0:5433/<user_id>/ratings/top/<num_movies>
 ```
