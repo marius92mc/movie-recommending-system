@@ -41,10 +41,12 @@ def add_ratings(user_id):
     return json.dumps(ratings)
 
 
-def create_app(spark_context, dataset_path):
+def create_app(spark_context, dataset_path, model_path):
     global recommendation_engine
 
-    recommendation_engine = RecommendationEngine(spark_context, dataset_path)
+    recommendation_engine = RecommendationEngine(spark_context,
+                                                 dataset_path,
+                                                 model_path)
 
     app = Flask(__name__)
     app.register_blueprint(main)

@@ -1,6 +1,8 @@
 import os
+import shutil
 from time import time
 from pyspark.mllib.recommendation import ALS
+from pyspark.mllib.recommendation import MatrixFactorizationModel
 
 import logging
 
@@ -26,7 +28,7 @@ class RecommendationEngine:
     """ A movie recommendation engine
     """
 
-    def __init__(self, spark_context, dataset_path):
+    def __init__(self, spark_context, dataset_path, model_path):
         """Init the recommendation engine given a Spark context and a dataset path
         """
         logger.info("Starting up the Recommendation Engine... ")
@@ -57,12 +59,19 @@ class RecommendationEngine:
         # Pre-calculate movies ratings counts
         self.__count_and_average_ratings()
 
+        # Path of the saved model
+        self.model_path = model_path
+
+        self.model = ""
+
         # Train the model
         self.rank = 8
         self.seed = 5L
         self.iterations = 10
         self.regularization_parameter = 0.1
-        self.__train_model()
+        if self.load_model() is False:
+            self.__train_model()
+            self.save_model()
 
     def __count_and_average_ratings(self):
         """ Updates the movies ratings counts
@@ -72,6 +81,20 @@ class RecommendationEngine:
         movie_id_with_ratings_rdd = self.ratings_rdd.map(lambda x: (x[1], x[2])).groupByKey()
         movie_id_with_avg_ratings_rdd = movie_id_with_ratings_rdd.map(get_counts_and_averages)
         self.movies_rating_counts_rdd = movie_id_with_avg_ratings_rdd.map(lambda x: (x[0], x[1][0]))
+
+    def save_model(self):
+        if self.model != "":
+            if os.path.isdir(self.model_path):
+                shutil.rmtree(self.model_path)
+            self.model.save(self.sc, self.model_path)
+            logger.info("ALS model saved")
+
+    def load_model(self):
+        if os.path.isdir(self.model_path):
+            self.model = MatrixFactorizationModel.load(self.sc, self.model_path)
+            logger.info("ALS model loaded")
+            return True
+        return False
 
     def __train_model(self):
         """ Train the ALS model with the current dataset
@@ -123,6 +146,7 @@ class RecommendationEngine:
         users already made this requests
         """
         self.__train_model()
+        self.save_model()
 
         return ratings
 

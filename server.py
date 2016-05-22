@@ -55,8 +55,10 @@ def main(argv):
 
     # Init spark context and load libraries
     sc = init_spark_context()
-    dataset_path = os.path.join('datasets', dataset)
-    app = create_app(sc, dataset_path)
+    dataset_path = os.path.join("datasets", dataset)
+    model_path = os.path.join("saved_models", "movie_lens_als")
+
+    app = create_app(sc, dataset_path, model_path)
 
     # start web server
     run_server(app)
