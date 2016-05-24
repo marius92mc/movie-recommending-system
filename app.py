@@ -1,12 +1,12 @@
-
 import json
 from engine import RecommendationEngine
 import logging
 
 from flask import Blueprint
 from flask import Flask, request
+from flask_sqlalchemy import SQLAlchemy
 
-main = Blueprint('main', __name__)
+main = Blueprint('main', __name__, static_folder="static", template_folder="templates")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @main.route("/<int:user_id>/ratings/top/<int:count>", methods=["GET"])
 def top_ratings(user_id, count):
     logger.debug("User %s TOP ratings requested", user_id)
-    top_ratings_data = recommendation_engine.get_top_ratings(user_id, count)
+    top_ratings_data = global_config['recommendation_engine'].get_top_ratings(user_id, count)
 
     return json.dumps(top_ratings_data)
 
@@ -23,7 +23,7 @@ def top_ratings(user_id, count):
 @main.route("/<int:user_id>/ratings/<int:movie_id>", methods=["GET"])
 def movie_ratings(user_id, movie_id):
     logger.debug("User %s rating requested for movie %s", user_id, movie_id)
-    ratings = recommendation_engine.get_ratings_for_movie_ids(user_id, [movie_id])
+    ratings = global_config['recommendation_engine'].get_ratings_for_movie_ids(user_id, [movie_id])
 
     return json.dumps(ratings)
 
@@ -36,20 +36,36 @@ def add_ratings(user_id):
     # create a list with the format required by the engine (user_id, movie_id, rating)
     ratings = map(lambda x: (user_id, int(x[0]), float(x[1])), ratings_list)
     # add them to the model using then engine API
-    recommendation_engine.add_ratings(ratings)
+    global_config['recommendation_engine'].add_ratings(ratings)
 
     return json.dumps(ratings)
 
 
-def create_app(spark_context, dataset_path, model_path):
-    global recommendation_engine
+global_config = {
+    'app': "",
+    'db': "",
+    'recommendation_engine': ""
+}
 
+
+def set_global_config(app, db, recommendation_engine):
+    global_config['app'] = app
+    global_config['db'] = db
+    global_config['recommendation_engine'] = recommendation_engine
+
+
+def create_app(spark_context, dataset_path, model_path):
     recommendation_engine = RecommendationEngine(spark_context,
                                                  dataset_path,
                                                  model_path)
 
     app = Flask(__name__)
     app.register_blueprint(main)
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db = SQLAlchemy(app)
+
+    set_global_config(app, db, recommendation_engine)
 
     return app
 
