@@ -6,5 +6,6 @@ DEBUG = True
 SECRET_KEY = 'keep_it_like_a_secret'
 
 # Database details
-SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/pre-registration'
-# SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/rs'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+

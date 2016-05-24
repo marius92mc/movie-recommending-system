@@ -5,8 +5,7 @@ from app import db
 
 
 class User(db.Model):
-    __tablename__ = "users"
-    global_config = None
+    __tablename__ = "Users"
 
     id = db.Column(db.String, nullable=False, primary_key=True)
     created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -16,10 +15,10 @@ class User(db.Model):
     profile_url = db.Column(db.String, nullable=False)
     access_token = db.Column(db.String, nullable=False)
 
-    def __init__(self, id, name, profile_url, access_token):
+    def __init__(self, id, created, updated, name, profile_url, access_token):
         self.id = id
-        #self.created = created
-        #self.updated = updated
+        self.created = created
+        self.updated = updated
         self.name = name
         self.profile_url = profile_url
         self.access_token = access_token

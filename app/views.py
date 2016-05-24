@@ -19,16 +19,19 @@ logger = logging.getLogger(__name__)
 def top_ratings(user_id, count):
     logger.debug("User %s TOP ratings requested", user_id)
     top_ratings_data = recommendation_engine.get_top_ratings(user_id, count)
-    """
-    user = User(id="awdad", name="nicename",
+    # -------------- db operations example ---------
+    user = User(id="id0",
+                created=datetime.utcnow(), updated=datetime.utcnow(),
+                name="nicename",
                 profile_url="...",
                 access_token="...")
-    db.session.add(user)
-    db.session.commit()
+    if User.query.filter_by(id="id0").count() < 1:
+        db.session.add(user)
+        db.session.commit()
 
-    g.user = session.get('user', None)
-    print g.user
-    """
+    users = User.query.all()
+    print users
+    # -----------------------------------------------
     return json.dumps(top_ratings_data)
 
 
