@@ -2,8 +2,11 @@ import cherrypy
 import os
 import sys
 from paste.translogger import TransLogger
-from app import create_app
+# from app import create_app
 from pyspark import SparkContext, SparkConf
+
+from app import app
+from app.views import create_recommendation_engine
 
 
 def init_spark_context():
@@ -17,7 +20,10 @@ def init_spark_context():
     then options in the spark-defaults.conf file.
     """
     # IMPORTANT: pass additional Python modules to each worker
-    spark_context = SparkContext(conf=conf, pyFiles=['engine.py', 'app.py'])
+    spark_context = SparkContext(conf=conf, pyFiles=['app/__init__.py',
+                                                     'engine.py',
+                                                     'app/views.py',
+                                                     'app/models.py'])
 
     return spark_context
 
@@ -58,8 +64,14 @@ def main(argv):
     dataset_path = os.path.join("datasets", dataset)
     model_path = os.path.join("saved_models", "movie_lens_als")
 
-    app = create_app(sc, dataset_path, model_path)
-
+    create_recommendation_engine(sc, dataset_path, model_path)
+    """
+    from app import global_config
+    if global_config['app'] is "":
+        print "NOK"
+    else:
+        print "OK"
+    """
     # start web server
     run_server(app)
 
