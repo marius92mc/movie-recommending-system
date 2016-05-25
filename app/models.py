@@ -15,10 +15,10 @@ class User(db.Model):
     profile_url = db.Column(db.String, nullable=False)
     access_token = db.Column(db.String, nullable=False)
 
-    def __init__(self, id, created, updated, name, profile_url, access_token):
+    def __init__(self, id, name, profile_url, access_token):
         self.id = id
-        self.created = created
-        self.updated = updated
+        self.created = datetime.utcnow()
+        self.updated = datetime.utcnow()
         self.name = name
         self.profile_url = profile_url
         self.access_token = access_token

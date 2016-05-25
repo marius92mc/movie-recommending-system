@@ -26,4 +26,9 @@ users = User.query.all()
 print users
 """
 
+FB_APP_ID = ""
+FB_APP_NAME = ""
+FB_APP_SECRET = ""
+
 from app import views, models
+
