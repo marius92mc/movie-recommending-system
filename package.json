@@ -33,6 +33,7 @@
     "eslint-plugin-react": "^5.1.1",
     "extract-text-webpack-plugin": "^0.8.1",
     "image-webpack-loader": "^1.4.0",
+    "jquery": "^2.2.4",
     "manifest-revision-webpack-plugin": "0.0.5",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
