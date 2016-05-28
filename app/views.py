@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 import json
 from engine import RecommendationEngine
 import logging
@@ -7,7 +8,7 @@ from app import app, db
 from app import FB_APP_ID, FB_APP_NAME, FB_APP_SECRET
 from facebook import get_user_from_cookie, GraphAPI
 
-from flask import g, render_template, redirect, request, session, url_for
+from flask import g, render_template, Response, redirect, request, session, url_for
 from models import User
 
 # main = Blueprint('main', __name__, static_folder="static", template_folder="templates")
@@ -16,7 +17,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@app.route("/")
+
+
+
+# -------------------------------------------------- to delete
+# @app.route("/")
 def index():
     # If a user was set in the get_current_user function before the request,
     # the user is logged in.
@@ -28,7 +33,7 @@ def index():
     return render_template('login.html', app_id=FB_APP_ID, name=FB_APP_NAME)
 
 
-@app.route('/logout')
+# @app.route('/logout')
 def logout():
     """ Log out the user from the application.
     Log out the user from the application by removing them from the
@@ -40,7 +45,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.before_request
+# @app.before_request
 def get_current_user():
     """Set g.user to the currently logged in user.
     Called before each request, get_current_user sets the global g.user
@@ -89,6 +94,40 @@ def get_current_user():
     # Commit changes to the database and set the user as a global g.user
     db.session.commit()
     g.user = session.get('user', None)
+
+# --------------------------------------------------
+
+
+@app.route('/api/comments', methods=['GET', 'POST'])
+def comments_handler():
+    with open('comments.json', 'r') as f:
+        comments = json.loads(f.read())
+
+    if request.method == 'POST':
+        new_comment = request.form.to_dict()
+        new_comment['id'] = int(time.time() * 1000)
+        comments.append(new_comment)
+
+        with open('comments.json', 'w') as f:
+            f.write(json.dumps(comments, indent=4, separators=(',', ': ')))
+
+    return Response(
+        json.dumps(comments),
+        mimetype='application/json',
+        headers={
+            'Cache-Control': 'no-cache',
+            'Access-Control-Allow-Origin': '*'
+        }
+    )
+
+# -----------------------------------------------------
+
+
+@app.route("/")
+def index():
+    return render_template("index2.html")
+
+
 
 
 
