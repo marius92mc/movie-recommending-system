@@ -3,6 +3,7 @@
 venv/
 node_modules/
 app/npm-debug.log
+app/static/bundle.js
 
 *.pyc
 

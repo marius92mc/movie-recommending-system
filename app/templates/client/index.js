@@ -27,9 +27,12 @@ var Content = React.createClass({
             callback={responseFacebook}
             icon="fa-facebook" />
 
-            <div id="mere">
-                mere from index.js file
+            <div id="test">
+                <p>
+                    test from index.js file
+                </p>
             </div>
+
         </div>
     );
   }
