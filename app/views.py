@@ -120,13 +120,12 @@ def comments_handler():
         }
     )
 
-# -----------------------------------------------------
+# ----------------------------------------------------- /to delete
 
 
 @app.route("/")
 def index():
-    return render_template("index2.html")
-
+    return render_template("client/index.html")
 
 
 
