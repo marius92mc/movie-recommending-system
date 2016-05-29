@@ -31,8 +31,10 @@ class FacebookLogin extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {textButton: 'Login with Facebook',
-                  loggedIn: false};
+    this.state = {
+      textButton: 'Login with Facebook',
+      loggedIn: false
+    };
   }
 
   componentDidMount() {
