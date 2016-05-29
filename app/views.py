@@ -128,7 +128,18 @@ def index():
     return render_template("client/index.html")
 
 
+@app.route("/save_user", methods=["POST"])
+def save_user():
+    user = User(id=request.json['id'],
+                name=request.json['name'],
+                access_token=request.json['accessToken'])
+    if User.query.filter_by(id=request.json['id']).count() < 1:
+        db.session.add(user)
+        db.session.commit()
 
+    print User.query.all()
+
+    return "user saved"
 
 
 
@@ -142,7 +153,6 @@ def top_ratings(user_id, count):
     # -------------- db operations example ---------
     user = User(id="id0",
                 name="nicename",
-                profile_url="...",
                 access_token="...")
     if User.query.filter_by(id="id0").count() < 1:
         db.session.add(user)

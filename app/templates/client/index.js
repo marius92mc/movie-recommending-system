@@ -9,10 +9,25 @@ var $ = require('jquery');
 const responseFacebook = (response) => {
   console.log(response);
   console.log(response["id"]);
-  /*
-  TODO
-  ajax POST to server the user
-   */
+
+  if ('id' in response &&
+      'name' in response &&
+      'accessToken' in response) {
+    console.log("logged in user, all the fields present");
+
+    $.ajax({
+      type: "POST",
+      url: Flask.url_for("save_user", {/* "param1": 1, "param2": "text" */}), // the method name, see the response from http://stackoverflow.com/questions/10314800/flask-url-for-urls-in-javascript
+      data: JSON.stringify(response, null, '\t'),
+      contentType: 'application/json;charset=UTF-8',
+      success: function (result) {
+        console.log(result);
+      }
+    });
+  } else {
+    console.log("logged in user doesn't have the required fields")
+  }
+
 }
 
 /*
