@@ -72,6 +72,11 @@ which will list all the databases available,
 "\connect rs;" to connect to the newly created rs database created above, 
 and "\d" will show the available tables from the connected database.
 
+Note: When droping table from psql console, also drop the sequence mentioned in 
+the models, otherwise the autoincrementing id will not be reseted, as it should be. 
+
+    DROP TABLE "Users"; DROP SEQUENCE seq_reg_id;
+
 Install npm packages needed for React
 
     $ npm install
