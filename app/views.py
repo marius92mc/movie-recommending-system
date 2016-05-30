@@ -9,9 +9,10 @@ from app import FB_APP_ID, FB_APP_NAME, FB_APP_SECRET
 from facebook import get_user_from_cookie, GraphAPI
 
 from flask import g, render_template, Response, redirect, request, session, url_for
-from models import User
+from models import User, Movie
 
 from utils.util_funcs import UsersIndices
+from utils.util_funcs import populate_movies_table
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -234,3 +235,4 @@ def create_recommendation_engine(spark_context, dataset_path, model_path):
                                                  dataset_path,
                                                  model_path)
 
+    populate_movies_table(spark_context, dataset_path)

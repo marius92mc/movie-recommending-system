@@ -13,10 +13,11 @@ jsglue = JSGlue(app)
 
 db = SQLAlchemy(app)
 
-from models import User
+from models import User, Movie
 
 with app.app_context():
     db.create_all()
+
 
 """ example
 user = User(id="awdad", name="nicename",

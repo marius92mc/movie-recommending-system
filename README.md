@@ -75,7 +75,8 @@ and "\d" will show the available tables from the connected database.
 Note: When droping table from psql console, also drop the sequence mentioned in 
 the models, otherwise the autoincrementing id will not be reseted, as it should be. 
 
-    DROP TABLE "Users"; DROP SEQUENCE seq_reg_id;
+    DROP TABLE "Users"; DROP SEQUENCE seq_user_id; 
+    DROP TABLE "Movies"; DROP SEQUENCE seq_movie_id;
 
 Install npm packages needed for React
 

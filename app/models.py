@@ -9,7 +9,7 @@ class User(db.Model):
 
     id = db.Column(db.String, nullable=False, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    id_incr = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1))
+    id_incr = db.Column(db.Integer, db.Sequence('seq_user_id', start=1, increment=1))
     created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated = db.Column(db.DateTime, default=datetime.utcnow, nullable=False,
                         onupdate=datetime.utcnow)
@@ -30,4 +30,23 @@ class User(db.Model):
 
     def get_id_incr(self):
         return self.id_incr
+
+
+class Movie(db.Model):
+    __tablename__ = "Movies"
+
+    id = db.Column(db.Integer, db.Sequence('seq_movie_id', start=1, increment=1), primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, name, year):
+        self.name = name
+        self.year = year
+
+    def get_movie_name(self):
+        return self.name
+
+    def get_movie_year(self):
+        return self.year
+
 
