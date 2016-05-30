@@ -9,6 +9,7 @@ class User(db.Model):
 
     id = db.Column(db.String, nullable=False, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    id_incr = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1))
     created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated = db.Column(db.DateTime, default=datetime.utcnow, nullable=False,
                         onupdate=datetime.utcnow)
@@ -26,3 +27,7 @@ class User(db.Model):
         user_details += "<User %r>" % self.id
 
         return user_details
+
+    def get_id_incr(self):
+        return self.id_incr
+

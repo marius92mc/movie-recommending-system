@@ -11,7 +11,7 @@ from facebook import get_user_from_cookie, GraphAPI
 from flask import g, render_template, Response, redirect, request, session, url_for
 from models import User
 
-# main = Blueprint('main', __name__, static_folder="static", template_folder="templates")
+from utils.util_funcs import UsersIndices
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -142,15 +142,48 @@ def save_user():
     return "user saved"
 
 
+def get_dataset_id_from_db_id(db_id):
+    """ Compute the int index of the user associated with the
+        string facebook id from the model
+
+    Params:
+        db_id   - facebook user id
+
+    Returns:
+        user_id - associated id from the trained model
+    """
+    """ Example of type, components and calling
+        a method for returning a specific column
+        via method implemented in model's class
+
+    for user in User.query.filter_by(id=user_id):
+        print type(user)
+        print user.__dict__
+        print user.get_id_incr() // method implemented in models.py
+    """
+    user_in_db = False
+    if User.query.filter_by(id=db_id).count() > 0:
+        user_in_db = True
+    if user_in_db is False:
+        return -1
+
+    index_db = int(User.query.filter_by(id=db_id).first().get_id_incr())
+    temp_obj = UsersIndices()
+    user_id = int(temp_obj.get_user_index_dataset(index_db))
+
+    return user_id
 
 
-
-
-@app.route("/<int:user_id>/ratings/top/<int:count>", methods=["GET"])
+@app.route("/<string:user_id>/ratings/top/<int:count>", methods=["GET"])
 def top_ratings(user_id, count):
+    user_id = get_dataset_id_from_db_id(user_id)
+    if user_id == -1:
+        return json.dumps([])
+
     logger.debug("User %s TOP ratings requested", user_id)
     top_ratings_data = recommendation_engine.get_top_ratings(user_id, count)
     # -------------- db operations example ---------
+    """
     user = User(id="id0",
                 name="nicename",
                 access_token="...")
@@ -160,20 +193,29 @@ def top_ratings(user_id, count):
 
     users = User.query.all()
     print users
+    """
     # -----------------------------------------------
     return json.dumps(top_ratings_data)
 
 
-@app.route("/<int:user_id>/ratings/<int:movie_id>", methods=["GET"])
+@app.route("/<string:user_id>/ratings/<int:movie_id>", methods=["GET"])
 def movie_ratings(user_id, movie_id):
+    user_id = get_dataset_id_from_db_id(user_id)
+    if user_id == -1:
+        return json.dumps([])
+
     logger.debug("User %s rating requested for movie %s", user_id, movie_id)
     ratings = recommendation_engine.get_ratings_for_movie_ids(user_id, [movie_id])
 
     return json.dumps(ratings)
 
 
-@app.route("/<int:user_id>/ratings", methods=["POST"])
+@app.route("/<string:user_id>/ratings", methods=["POST"])
 def add_ratings(user_id):
+    user_id = get_dataset_id_from_db_id(user_id)
+    if user_id == -1:
+        return json.dumps([])
+
     # get the ratings from the Flask POST request object
     ratings_list = request.form.keys()[0].strip().split("\n")
     ratings_list = map(lambda x: x.split(","), ratings_list)
