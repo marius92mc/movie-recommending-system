@@ -38,10 +38,12 @@ class Movie(db.Model):
     id = db.Column(db.Integer, db.Sequence('seq_movie_id', start=1, increment=1), primary_key=True)
     name = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
+    id_dataset = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, name, year):
+    def __init__(self, name, year, id_dataset):
         self.name = name
         self.year = year
+        self.id_dataset = id_dataset
 
     def get_movie_name(self):
         return self.name
@@ -49,4 +51,6 @@ class Movie(db.Model):
     def get_movie_year(self):
         return self.year
 
+    def get_id_dataset(self):
+        return self.id_dataset
 

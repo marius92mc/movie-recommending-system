@@ -16,7 +16,7 @@ class UsersIndices:
         return self.starting_index + index_db
 
 
-def get_movies_name(spark_context, dataset_path):
+def get_movies_id_name_from_dataset(spark_context, dataset_path):
     movies_file_path = os.path.join(dataset_path, 'movies.csv')
     movies_raw_rdd = spark_context.textFile(movies_file_path)
     movies_raw_data_header = movies_raw_rdd.take(1)[0]
@@ -25,7 +25,7 @@ def get_movies_name(spark_context, dataset_path):
         .map(lambda line: line.split(","))\
         .map(lambda tokens: (int(tokens[0]), tokens[1], tokens[2])).cache()
 
-    movies_name_rdd = movies_rdd.map(lambda x: (x[1]))
+    movies_name_rdd = movies_rdd.map(lambda x: (x[0], x[1]))
 
     return movies_name_rdd.collect()
 
@@ -34,13 +34,16 @@ def populate_movies_table(spark_context, dataset_path):
     if len(Movie.query.all()) > 0:
         return False
 
-    movies_name = get_movies_name(spark_context, dataset_path)
-
+    movies_id_name = get_movies_id_name_from_dataset(spark_context, dataset_path)
     count_movies_db = 0
-    for movie_name in movies_name:
+    for movie_id_name in movies_id_name:
+        id_dataset = int(movie_id_name[0])
+
         p = re.compile(r'\([^)]*\)')
-        name = re.sub(p, '', movie_name)
-        years = re.findall('\((.*?)\)', movie_name)
+        name = re.sub(p, '', movie_id_name[1])
+        name = name.replace('"', '')
+
+        years = re.findall('\((.*?)\)', movie_id_name[1])
 
         year = -1
         for year_entry in years:
@@ -50,11 +53,11 @@ def populate_movies_table(spark_context, dataset_path):
 
         if year > 2008:
             movie = Movie(name=name,
-                          year=year)
+                          year=year,
+                          id_dataset=id_dataset)
             db.session.add(movie)
             db.session.commit()
             count_movies_db += 1
-
 
     logger.info("Filled " +
                 str(count_movies_db) +
