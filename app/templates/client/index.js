@@ -1,8 +1,9 @@
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import FacebookLogin from './components/facebook_login/facebook';
+import Autocomplete from './components/autocomplete/autocomplete';
 
 var $ = require('jquery');
 
@@ -34,6 +35,12 @@ const responseFacebook = (response) => {
   jquery area for components/divs get/post server
  */
 
+const data = [
+    'phrase one',
+    'phrase two'
+];
+
+
 var Content = React.createClass({
   render: function() {
     return (
@@ -49,6 +56,10 @@ var Content = React.createClass({
                     test from index.js file
                 </p>
             </div>
+
+            <Autocomplete
+              placeholder="Enter a movie title..."
+              data={ data } />
 
         </div>
     );
