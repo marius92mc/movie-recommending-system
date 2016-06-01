@@ -61,7 +61,7 @@ class Autocomplete extends Component {
             input: 'autocomplete-input',
             listContainer: 'autocomplete-container',
             listItems: 'autocomplete-items'
-          } }
+                } }
 					styles={ {
 						...styles
                 	} }

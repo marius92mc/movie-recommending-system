@@ -27,18 +27,32 @@ const responseFacebook = (response) => {
     });
   } else {
     console.log("logged in user doesn't have the required fields")
-  }
-
+  } /* if */
 }
 
 /*
   jquery area for components/divs get/post server
  */
 
-const data = [
-    'phrase one',
-    'phrase two'
+var gMoviesName = [
 ];
+
+$(document).ready(function() {
+  $.ajax({
+    type: "GET",
+    url: Flask.url_for("get_movies"),
+    data: "",
+    contentType: 'application/json;charset=UTF-8',
+    success: function (movie_entries) {
+      var parsed = JSON.parse(movie_entries);
+      for (var i = 0; i < parsed.length; i++) {
+        gMoviesName.push(parsed[i]["name"]);
+      }
+      console.log("Autocomplete populated with " + gMoviesName.length + " movie titles");
+    }
+  }); /* ajax */
+});
+
 
 
 var Content = React.createClass({
@@ -59,7 +73,7 @@ var Content = React.createClass({
 
             <Autocomplete
               placeholder="Enter a movie title..."
-              data={ data } />
+              data={ gMoviesName } />
 
         </div>
     );

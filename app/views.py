@@ -143,6 +143,20 @@ def save_user():
     return "user saved"
 
 
+@app.route("/get_movies", methods=["GET"])
+def get_movies():
+    movies = Movie.query.all()
+    movie_entries = []
+
+    for movie in movies:
+        movie_entry = {}
+        movie_entry['name'] = movie.get_movie_name()
+        movie_entry['id_dataset'] = movie.get_id_dataset()
+        movie_entries.append(movie_entry)
+
+    return json.dumps(movie_entries)
+
+
 def get_dataset_id_from_db_id(db_id):
     """ Compute the int index of the user associated with the
         string facebook id from the model
