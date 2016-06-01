@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import AutoCompleter from 'react-autocompleter';
 
 
-
 const styles = {
 	root: {
 		padding: '5px'
@@ -20,7 +19,6 @@ const styles = {
 	},
 	listItems: {
 		padding: '10px',
-
 		'.active': {
 			fontSize: '20px'
 		}
