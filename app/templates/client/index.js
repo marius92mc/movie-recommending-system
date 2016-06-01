@@ -65,12 +65,6 @@ var Content = React.createClass({
             callback={responseFacebook}
             icon="fa-facebook" />
 
-            <div id="test">
-                <p>
-                    test from index.js file
-                </p>
-            </div>
-
             <Autocomplete
               placeholder="Enter a movie title..."
               data={ gMoviesName } />
