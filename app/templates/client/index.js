@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import FacebookLogin from './components/facebook_login/facebook';
 import Autocomplete from './components/autocomplete/autocomplete';
+import Rating from './components/star_rating/star_rating';
 
 var $ = require('jquery');
+
+var gLoggedInUserId = "";
 
 const responseFacebook = (response) => {
   console.log(response);
@@ -14,8 +17,13 @@ const responseFacebook = (response) => {
   if ('id' in response &&
       'name' in response &&
       'accessToken' in response) {
-    console.log("logged in user, all the fields present");
 
+    console.log("logged in user, all the fields present");
+    gLoggedInUserId = response["id"];
+
+    /*
+     * POSTing the logged in user's data
+     */
     $.ajax({
       type: "POST",
       url: Flask.url_for("save_user", {/* "param1": 1, "param2": "text" */}), // the method name, see the response from http://stackoverflow.com/questions/10314800/flask-url-for-urls-in-javascript
@@ -38,6 +46,9 @@ var gMoviesName = [
 ];
 
 $(document).ready(function() {
+  /*
+   * Populating autocomplete with movie names
+   */
   $.ajax({
     type: "GET",
     url: Flask.url_for("get_movies"),
@@ -50,9 +61,86 @@ $(document).ready(function() {
       }
       console.log("Autocomplete populated with " + gMoviesName.length + " movie titles");
     }
-  }); /* ajax */
+  }); /* ajax GET */
 });
 
+
+var RateMovie = React.createClass({
+  getInitialState: function() {
+    return {
+      movieName: '',
+      rating: this.props.starCount
+    }
+  },
+
+  componentDidMount: function() {
+    $("#loadingImage").hide();
+  },
+
+  changeInputMovieName: function(movieName) {
+    this.setState({
+      movieName: movieName
+    });
+  },
+
+  changeInputRating: function(ratingClicked) {
+    this.setState({
+      rating: ratingClicked
+    });
+  },
+
+  handleSubmit: function(e) {
+    if (gLoggedInUserId == "") {
+      alert("Please log in first");
+      return ;
+    }
+
+    $("#retrainedMessage").html("Training...");
+
+    /*
+     * POST movieName and rating to server
+     */
+    $.ajax({
+      type: "POST",
+      url: Flask.url_for("add_rating", { "user_id": gLoggedInUserId }),
+      data: JSON.stringify(this.state, null, '\t'),
+      contentType: 'application/json;charset=UTF-8',
+      beforeSend: function() {
+        $("#loadingImage").show();
+      },
+      success: function (result) {
+        console.log(result);
+        $("#loadingImage").hide();
+        $("#retrainedMessage").html("Trained in " + result + ' seconds.');
+      }
+    }); /* ajax */
+
+    console.log(this.state);
+  },
+
+  render: function() {
+    let boundClick = this.handleSubmit;
+
+    return (
+      <div>
+
+        <Autocomplete
+          placeholder={ this.props.autocompletePlaceholder }
+          data={ this.props.autocompleteData }
+          onSelect={ this.changeInputMovieName } />
+
+        <Rating
+          starCount = { this.props.starCount }
+          onSelect={ this.changeInputRating }/>
+
+        <div onClick={ boundClick }>Click me</div>
+        <img id="loadingImage" src="../../static/images/ring-alt.gif" />
+        <div id="retrainedMessage"> </div>
+
+      </div>
+    );
+  }
+});
 
 
 var Content = React.createClass({
@@ -65,9 +153,10 @@ var Content = React.createClass({
             callback={responseFacebook}
             icon="fa-facebook" />
 
-            <Autocomplete
-              placeholder="Enter a movie title..."
-              data={ gMoviesName } />
+          <RateMovie
+            autocompletePlaceholder="Enter a movie title..."
+            autocompleteData = { gMoviesName }
+            starCount = { 10 } />
 
         </div>
     );

@@ -32,15 +32,8 @@ class Autocomplete extends Component {
 		super(props);
 	}
 
-	state = {
-		value: ''
-	};
-
 	updateValue = (value) => {
 		console.log('Value updated', value);
-		this.setState({
-			value
-		});
 	}
 
 	render() {
@@ -49,7 +42,11 @@ class Autocomplete extends Component {
 				<AutoCompleter
 					data={ this.props.data }
 					placeholder={ this.props.placeholder }
-					onSelect={ (item) => { console.log('Selected', item); } }
+					onSelect= { (item) => {
+					  console.log('Selected', item);
+					  this.props.onSelect(item);
+					  }
+					}
 					onFocus={ () => { console.log('Focused'); } }
 					onBlur={ () => { console.log('Blurred'); } }
 					onChange={ this.updateValue }

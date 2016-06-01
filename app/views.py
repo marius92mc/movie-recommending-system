@@ -1,5 +1,5 @@
 from datetime import datetime
-import time
+from time import time
 import json
 from engine import RecommendationEngine
 import logging
@@ -155,6 +155,30 @@ def get_movies():
         movie_entries.append(movie_entry)
 
     return json.dumps(movie_entries)
+
+
+@app.route("/<string:user_id>/rating", methods=["POST"])
+def add_rating(user_id):
+    user_id = get_dataset_id_from_db_id(user_id)
+    if user_id == -1:
+        return json.dumps([])
+
+    print request.json['movieName'], request.json['rating']
+    query_result = Movie.query.filter_by(name=request.json['movieName'])
+    if query_result.count() < 1:
+        logger.info("Error, not a valid movie name")
+        return json.dumps([])
+
+    id_dataset = int(query_result.first().get_id_dataset())
+    print user_id, id_dataset
+
+    user_movie_rating = [[user_id, id_dataset, float(request.json['rating'])]]
+
+    time0 = time()
+    recommendation_engine.add_ratings(user_movie_rating)
+    retrained_time = round(time() - time0, 3)
+
+    return json.dumps(retrained_time)
 
 
 def get_dataset_id_from_db_id(db_id):
