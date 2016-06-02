@@ -154,13 +154,13 @@ Logs can be seen in the above provided files.
     $ tail -f stderr
 
 By default, as it is mentioned in <i>server.py</i>, CherryPy will use 
-port 5435. 
+port 5434. 
 Change it from the same file if it is busy.
 ### 3. <b>Operations on the constructed model</b>
 - <b>POSTing new ratings</b> to the model
 
 ```
-$ curl --data-binary @user_ratings/user_ratings.file http://0.0.0.0:5435/<user_id>/ratings
+$ curl --data-binary @user_ratings/user_ratings.file http://0.0.0.0:5434/<user_id>/ratings
 ```
 
 where user_id is 0 by default representing a total new user, 
@@ -179,42 +179,42 @@ rating awarded by the user from user_ratings.file.
 - <b>GETing best recommendations</b>
 
 ```
-$ curl http://0.0.0.0:5435/<user_id>/ratings/top/<num_movies>
+$ curl http://0.0.0.0:5434/<user_id>/ratings/top/<num_movies>
 ```
 
 or in browser 
 
-http://0.0.0.0:5435/user_id/ratings/top/num_movies
+http://0.0.0.0:5434/user_id/ratings/top/num_movies
 
 Example
 
-    $ curl http://0.0.0.0:5435/0/ratings/top/10
-    $ curl http://0.0.0.0:5435/3/ratings/top/10
+    $ curl http://0.0.0.0:5434/0/ratings/top/10
+    $ curl http://0.0.0.0:5434/3/ratings/top/10
 
-[http://0.0.0.0:5435/0/ratings/top/10](http://0.0.0.0:5435/0/ratings/top/10)
+[http://0.0.0.0:5434/0/ratings/top/10](http://0.0.0.0:5434/0/ratings/top/10)
 
 <b>Description</b>: Will present the best num_movies recommendations for user with user_id.
 
 - <b>GETing individual ratings</b>
 
 ```
-$ curl http://0.0.0.0:5435/<user_id>/ratings/<movie_id>
+$ curl http://0.0.0.0:5434/<user_id>/ratings/<movie_id>
 ```
 
 or in browser
 
-http://0.0.0.0:5435/user_id/ratings/movie_id
+http://0.0.0.0:5434/user_id/ratings/movie_id
 
 Example
 
 ```
-curl http://0.0.0.0:5435/0/ratings/500
-curl http://0.0.0.0:5435/3/ratings/500
+curl http://0.0.0.0:5434/0/ratings/500
+curl http://0.0.0.0:5434/3/ratings/500
 ```
 
-[http://0.0.0.0:5435/0/ratings/500](http://0.0.0.0:5435/0/ratings/500)
+[http://0.0.0.0:5434/0/ratings/500](http://0.0.0.0:5434/0/ratings/500)
 
-[http://0.0.0.0:5435/1/ratings/500](http://0.0.0.0:5435/1/ratings/500)
+[http://0.0.0.0:5434/1/ratings/500](http://0.0.0.0:5434/1/ratings/500)
 
 <b>Description</b>: Will get the predicted movie rating, from the model, of 
 user_id for movie_id. 

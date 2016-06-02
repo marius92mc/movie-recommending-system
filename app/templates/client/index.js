@@ -17,6 +17,7 @@ injectTapEventPlugin();
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import ReactDataGridExample from './components/react_data_grid_example/react_data_grid_example';
 
 var $ = require('jquery');
 
@@ -27,7 +28,7 @@ var gRecommendedMovies = [
 
 function getBestRecommendations() {
   gRecommendedMovies = [];
-
+  $("#bestRecommendations").html("");
   //$("#bestRecommendations").html("Computing...");
 
   /*
@@ -52,6 +53,14 @@ function getBestRecommendations() {
         console.log(gRecommendedMovies[0]);
       }
       console.log("Populated with " + gRecommendedMovies.length + " movies");
+
+      $("#bestRecommendations").append("<ol>");
+      for (var i = 0; i < 10; i++) {
+        $("#bestRecommendations").append("<li>" + (i + 1) + ". " +
+          gRecommendedMovies[i][0] + " - " + gRecommendedMovies[i][1].toFixed(2) + "</li>");
+      }
+       $("#bestRecommendations").append("</ol>");
+
     }
   }); /* ajax GET */
 }
@@ -162,7 +171,7 @@ var RateMovie = React.createClass({
       return ;
     }
 
-    $("#retrainedMessage").html("Training...");
+    $("#retrainedMessage").html("<i><small>Training...</small></i>");
 
     /*
      * POST movieName and rating to server
@@ -178,8 +187,11 @@ var RateMovie = React.createClass({
       success: function (result) {
         console.log(result);
         $("#loadingImage").hide();
-        $("#retrainedMessage").html("Trained in " + result + ' seconds.');
+        $("#retrainedMessage").html("<i><small>Trained in " + result + ' seconds.</small></i>');
+
         getBestRecommendations();
+
+        $("#retrainedMessage").delay(5000).fadeOut('slow');
       }
     }); /* ajax */
 
@@ -187,8 +199,6 @@ var RateMovie = React.createClass({
   },
 
   render: function() {
-    let boundClick = this.handleSubmit;
-
     return (
       <div>
 
@@ -203,7 +213,7 @@ var RateMovie = React.createClass({
 
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <FlatButton
-            label="Submit"
+            label="Rate"
             primary={ true }
             onTouchTap={ this.handleSubmit }
             style={{
@@ -236,10 +246,9 @@ var BestRecommendations = React.createClass({
 
 
 
-        bla bla fancy infinit scrolling table
 
-
-
+        <div> <b>Recommended Movies</b> </div>
+        <br /> <br />
         <img id="loadingImage3" src="../../static/images/ring-alt.gif" />
         <div id="bestRecommendations"> </div>
       </div>
@@ -271,7 +280,7 @@ var PredictMovieRating = React.createClass({
       return;
     }
 
-    $("#predictedMovie").html("Computing...");
+    $("#predictedMovie").html("<i><small>Computing...</small></i>");
 
     /*
      * POST movieName to server
@@ -292,6 +301,7 @@ var PredictMovieRating = React.createClass({
         $("#loadingImage2").hide();
         $("#predictedMovie").show(1500);
         $("#predictedMovie").html(predictedMovie['movieName'] + ' ' + predictedMovie['rating']);
+        $("#predictedMovie").delay(9000).fadeOut('slow');
       }
     }); /* ajax */
   },
@@ -317,6 +327,7 @@ var PredictMovieRating = React.createClass({
         </MuiThemeProvider>
 
         <img id="loadingImage2" src="../../static/images/ring-alt.gif" />
+        <br /> <br />
         <div id="predictedMovie"> </div>
 
       </div>
@@ -336,13 +347,15 @@ var Content = React.createClass({
             callback={responseFacebook}
             icon="fa-facebook" />
 
+          <br /> <br />
+
           <div id="information">
             <RateMovie
               autocompletePlaceholder="Enter a movie title..."
               autocompleteData={ gMoviesName }
               starCount={ 10 } />
 
-            <br /> <br /> <br />
+            <br />
             <BestRecommendations />
             <br /> <br /> <br />
 

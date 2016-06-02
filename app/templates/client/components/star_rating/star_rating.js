@@ -33,7 +33,7 @@ var Rating = React.createClass({
   handleClick: function(idx, evt){
     this.state.rating = idx + 1;
     this.forceUpdate();
-    console.log('clicked');
+    console.log('clicked ' + this.state.rating);
     this.props.onSelect(this.state.rating);
   },
 
