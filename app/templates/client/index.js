@@ -2,10 +2,21 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FacebookLogin from './components/facebook_login/facebook';
 import Autocomplete from './components/autocomplete/autocomplete';
 import Rating from './components/star_rating/star_rating';
 import Center from 'react-center';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap
+// Check this repo:
+// https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
 
 var $ = require('jquery');
 
@@ -190,7 +201,17 @@ var RateMovie = React.createClass({
           starCount = { this.props.starCount }
           onSelect={ this.changeInputRating }/>
 
-        <div onClick={ boundClick }>Submit</div>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <FlatButton
+            label="Submit"
+            primary={ true }
+            onTouchTap={ this.handleSubmit }
+            style={{
+              position: 'static',
+              margin: '0 auto'
+            }} />
+        </MuiThemeProvider>
+
         <img id="loadingImage" src="../../static/images/ring-alt.gif" />
         <div id="retrainedMessage"> </div>
 
@@ -228,7 +249,7 @@ var BestRecommendations = React.createClass({
 
 
 var PredictMovieRating = React.createClass({
-    getInitialState: function() {
+  getInitialState: function() {
     return {
       movieName: ''
     }
@@ -276,8 +297,6 @@ var PredictMovieRating = React.createClass({
   },
 
   render: function() {
-    let boundClick = this.handleSubmit;
-
     return (
       <div>
 
@@ -286,7 +305,17 @@ var PredictMovieRating = React.createClass({
           data={ this.props.autocompleteData }
           onSelect={ this.changeInputMovieName } />
 
-        <div onClick={ boundClick }>Submit</div>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <FlatButton
+            label="Submit"
+            primary={ true }
+            onTouchTap={ this.handleSubmit }
+            style={{
+              position: 'static',
+              margin: '0 auto'
+            }} />
+        </MuiThemeProvider>
+
         <img id="loadingImage2" src="../../static/images/ring-alt.gif" />
         <div id="predictedMovie"> </div>
 
