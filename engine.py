@@ -52,7 +52,7 @@ class RecommendationEngine:
 
         self.movies_rdd = movies_raw_rdd.filter(lambda line: line != movies_raw_data_header)\
             .map(lambda line: line.split(","))\
-            .map(lambda tokens: (int(tokens[0]), tokens[1], tokens[2])).cache()
+            .map(lambda tokens: (int(tokens[0]), tokens[1].replace('"', ''), tokens[2])).cache()
 
         self.movies_titles_rdd = self.movies_rdd.map(lambda x: (int(x[0]), x[1])).cache()
 
