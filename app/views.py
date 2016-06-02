@@ -124,6 +124,39 @@ def comments_handler():
 # ----------------------------------------------------- /to delete
 
 
+
+def get_dataset_id_from_db_id(db_id):
+    """ Compute the int index of the user associated with the
+        string facebook id from the model
+
+    Params:
+        db_id   - facebook user id
+
+    Returns:
+        user_id - associated id from the trained model
+    """
+    """ Example of type, components and calling
+        a method for returning a specific column
+        via method implemented in model's class
+
+    for user in User.query.filter_by(id=user_id):
+        print type(user)
+        print user.__dict__
+        print user.get_id_incr() // method implemented in models.py
+    """
+    user_in_db = False
+    if User.query.filter_by(id=db_id).count() > 0:
+        user_in_db = True
+    if user_in_db is False:
+        return -1
+
+    index_db = int(User.query.filter_by(id=db_id).first().get_id_incr())
+    temp_obj = UsersIndices()
+    user_id = int(temp_obj.get_user_index_dataset(index_db))
+
+    return user_id
+
+
 @app.route("/")
 def index():
     return render_template("client/index.html")
@@ -181,36 +214,45 @@ def add_rating(user_id):
     return json.dumps(retrained_time)
 
 
-def get_dataset_id_from_db_id(db_id):
-    """ Compute the int index of the user associated with the
-        string facebook id from the model
+@app.route("/<string:user_id>/bestratings/<int:num_movies>", methods=["GET"])
+def get_best_ratings(user_id, num_movies):
+    user_id = get_dataset_id_from_db_id(user_id)
+    if user_id == -1:
+        return json.dumps([])
 
-    Params:
-        db_id   - facebook user id
+    top_ratings_data = recommendation_engine.get_top_ratings(user_id, num_movies)
 
-    Returns:
-        user_id - associated id from the trained model
-    """
-    """ Example of type, components and calling
-        a method for returning a specific column
-        via method implemented in model's class
+    return json.dumps(top_ratings_data)
 
-    for user in User.query.filter_by(id=user_id):
-        print type(user)
-        print user.__dict__
-        print user.get_id_incr() // method implemented in models.py
-    """
-    user_in_db = False
-    if User.query.filter_by(id=db_id).count() > 0:
-        user_in_db = True
-    if user_in_db is False:
-        return -1
 
-    index_db = int(User.query.filter_by(id=db_id).first().get_id_incr())
-    temp_obj = UsersIndices()
-    user_id = int(temp_obj.get_user_index_dataset(index_db))
+@app.route("/<string:user_id>/ratings/", methods=["POST"])
+def get_predicted_movie_rating(user_id):
+    user_id = get_dataset_id_from_db_id(user_id)
+    if user_id == -1:
+        return json.dumps([])
 
-    return user_id
+    query_result = Movie.query.filter_by(name=request.json['movieName'])
+    if query_result.count() < 1:
+        logger.info("Error, not a valid movie name")
+        return json.dumps([])
+
+    id_movie_dataset = int(query_result.first().get_id_dataset())
+    # print user_id, id_movie_dataset
+
+    logger.debug("User %s rating requested for movie %s", user_id, id_movie_dataset)
+    movie_rating = recommendation_engine.get_ratings_for_movie_ids(user_id, [id_movie_dataset])
+
+    if len(movie_rating[0]) < 3:
+        return json.dumps([])
+    predicted_movie = {}
+    predicted_movie['movieName'] = request.json['movieName']
+    predicted_movie['rating'] = round(movie_rating[0][1], 3)
+    if predicted_movie['rating'] < 1:
+        predicted_movie['rating'] = 1
+
+    return json.dumps(predicted_movie)
+
+
 
 
 @app.route("/<string:user_id>/ratings/top/<int:count>", methods=["GET"])
@@ -247,6 +289,7 @@ def movie_ratings(user_id, movie_id):
     ratings = recommendation_engine.get_ratings_for_movie_ids(user_id, [movie_id])
 
     return json.dumps(ratings)
+
 
 
 @app.route("/<string:user_id>/ratings", methods=["POST"])

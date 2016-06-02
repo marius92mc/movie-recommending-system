@@ -94,6 +94,7 @@ class FacebookLogin extends React.Component {
         textButton: 'Login with Facebook',
         loggedIn: false
       });
+      this.props.callback(null);
     } else {
       FB.login(this.checkLoginState, { scope: this.props.scope });
       this.setState({
