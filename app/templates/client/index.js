@@ -170,7 +170,7 @@ var RateMovie = React.createClass({
       alert("Please log in first");
       return ;
     }
-
+    $("#retrainedMessage").show();
     $("#retrainedMessage").html("<i><small>Training...</small></i>");
 
     /*
@@ -280,6 +280,7 @@ var PredictMovieRating = React.createClass({
       return;
     }
 
+    $("#predictedMovie").show();
     $("#predictedMovie").html("<i><small>Computing...</small></i>");
 
     /*
