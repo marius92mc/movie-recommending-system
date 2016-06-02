@@ -312,13 +312,15 @@ var Content = React.createClass({
               autocompletePlaceholder="Enter a movie title..."
               autocompleteData={ gMoviesName }
               starCount={ 10 } />
+
             <br /> <br /> <br />
             <BestRecommendations />
             <br /> <br /> <br />
+
             <PredictMovieRating
               autocompletePlaceholder="Enter a movie title..."
-              autocompleteData={ gMoviesName }
-            />
+              autocompleteData={ gMoviesName } />
+
           </div>
 
         </div>
