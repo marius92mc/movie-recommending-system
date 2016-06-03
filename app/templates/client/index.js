@@ -22,8 +22,7 @@ import ReactDataGridExample from './components/react_data_grid_example/react_dat
 var $ = require('jquery');
 
 var gLoggedInUserId = "";
-var gRecommendedMovies = [
-];
+var gRecommendedMovies = [];
 
 
 function getBestRecommendations() {
@@ -66,16 +65,36 @@ function getBestRecommendations() {
 }
 
 
+function loadBodyBackgroundImage(numMiliseconds) {
+  setTimeout(function() {
+      $('body').css("background-image", "url(http://marius92mc.github.io/materials/images/connections.jpg)")
+    },
+    numMiliseconds
+  );
+}
+
+
+function makeBackgroundGrey() {
+  $('body').css('background', '#EEEEEE');
+}
+
+
+$(window).load(function() {
+  loadBodyBackgroundImage(0);
+});
+
+
 const responseFacebook = (response) => {
   if (response == null) {
     $("#predictedMovie").hide();
     $("#retrainedMessage").hide();
 
     $("#information").hide(1500);
+    loadBodyBackgroundImage(1300);
+
     console.log("logged in user doesn't have the required fields");
     return false;
   }
-
   console.log(response);
   console.log(response["id"]);
 
@@ -83,6 +102,7 @@ const responseFacebook = (response) => {
       'name' in response &&
       'accessToken' in response) {
 
+    makeBackgroundGrey();
     console.log("logged in user, all the fields present");
     gLoggedInUserId = response["id"];
 
@@ -111,8 +131,7 @@ const responseFacebook = (response) => {
   jquery area for components/divs get/post server
  */
 
-var gMoviesName = [
-];
+var gMoviesName = [];
 
 
 $(document).ready(function() {
@@ -137,7 +156,6 @@ $(document).ready(function() {
     }
   }); /* ajax GET */
 });
-
 
 
 
@@ -244,13 +262,11 @@ var BestRecommendations = React.createClass({
     return (
       <div>
 
-
-
-
         <div> <b>Recommended Movies</b> </div>
         <br /> <br />
         <img id="loadingImage3" src="../../static/images/ring-alt.gif" />
         <div id="bestRecommendations"> </div>
+
       </div>
     );
   }
@@ -350,22 +366,24 @@ var Content = React.createClass({
 
           <br /> <br />
 
-          <div id="information">
-            <RateMovie
-              autocompletePlaceholder="Enter a movie title..."
-              autocompleteData={ gMoviesName }
-              starCount={ 10 } />
+          <Center>
+            <div id="information">
 
-            <br />
-            <BestRecommendations />
-            <br /> <br /> <br />
+              <RateMovie
+                autocompletePlaceholder="Enter a movie title..."
+                autocompleteData={ gMoviesName }
+                starCount={ 10 } />
 
-            <PredictMovieRating
-              autocompletePlaceholder="Enter a movie title..."
-              autocompleteData={ gMoviesName } />
+              <br />
+              <BestRecommendations />
+              <br /> <br /> <br />
 
-          </div>
+              <PredictMovieRating
+                autocompletePlaceholder="Enter a movie title..."
+                autocompleteData={ gMoviesName } />
 
+            </div>
+          </Center>
         </div>
     );
   }
