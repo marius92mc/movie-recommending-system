@@ -263,7 +263,7 @@ var BestRecommendations = React.createClass({
       <div>
 
         <div> <b>Recommended Movies</b> </div>
-        <br /> <br />
+
         <img id="loadingImage3" src="../../static/images/ring-alt.gif" />
         <div id="bestRecommendations"> </div>
 
@@ -356,7 +356,7 @@ var PredictMovieRating = React.createClass({
 var Content = React.createClass({
   render: function() {
     return (
-        <div>
+        <div class="container">
 
           <FacebookLogin
             appId="361217287335942"
@@ -384,6 +384,7 @@ var Content = React.createClass({
 
             </div>
           </Center>
+
         </div>
     );
   }
