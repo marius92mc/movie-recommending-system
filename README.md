@@ -157,6 +157,11 @@ By default, as it is mentioned in <i>server.py</i>, CherryPy will use
 port 5434. 
 Change it from the same file if it is busy.
 ### 3. <b>Operations on the constructed model</b>
+
+Go to [http://0.0.0.0:5434/](http://0.0.0.0:5434/) and and have fun.
+
+Or interact with the constructed ML model via terminal with the following commands.
+
 - <b>POSTing new ratings</b> to the model
 
 ```
