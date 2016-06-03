@@ -53,12 +53,17 @@ function getBestRecommendations() {
       }
       console.log("Populated with " + gRecommendedMovies.length + " movies");
 
-      $("#bestRecommendations").append("<ol>");
+      $("#bestRecommendations").append("<ul class='list-group'>");
       for (var i = 0; i < 10; i++) {
-        $("#bestRecommendations").append("<li>" + (i + 1) + ". " +
-          gRecommendedMovies[i][0] + " - " + gRecommendedMovies[i][1].toFixed(2) + "</li>");
+        $("#bestRecommendations").append("<li class='list-group-item'>" +
+                                            "<span class='badge'>" +
+                                               gRecommendedMovies[i][1].toFixed(2) +
+                                            "</span>" +
+                                            (i + 1) + ". " +
+                                            gRecommendedMovies[i][0] +
+                                         "</li>");
       }
-       $("#bestRecommendations").append("</ol>");
+       $("#bestRecommendations").append("</ul>");
 
     }
   }); /* ajax GET */
@@ -261,12 +266,15 @@ var BestRecommendations = React.createClass({
   render: function() {
     return (
       <div>
-
-        <div> <b>Recommended Movies</b> </div>
-
-        <img id="loadingImage3" src="../../static/images/ring-alt.gif" />
+        <center>
+          <div>
+              <b>
+                Recommended Movies
+              </b>
+          </div>
+          <img id="loadingImage3" src="../../static/images/ring-alt.gif" />
+        </center>
         <div id="bestRecommendations"> </div>
-
       </div>
     );
   }
@@ -297,7 +305,13 @@ var PredictMovieRating = React.createClass({
     }
 
     $("#predictedMovie").show();
-    $("#predictedMovie").html("<i><small>Computing...</small></i>");
+    $("#predictedMovie").html("<center> " +
+                                "<i>" +
+                                  "<small>" +
+                                    "Computing..." +
+                                  "</small>" +
+                                "</i>" +
+                              "</center>");
 
     /*
      * POST movieName to server
@@ -317,7 +331,16 @@ var PredictMovieRating = React.createClass({
         console.log(predictedMovie);
         $("#loadingImage2").hide();
         $("#predictedMovie").show(1500);
-        $("#predictedMovie").html(predictedMovie['movieName'] + ' ' + predictedMovie['rating']);
+
+        $("#predictedMovie").html("");
+        $("#predictedMovie").append("<ul class='list-group'>" +
+                                       "<li class='list-group-item'>" +
+                                          "<span class='badge'>" +
+                                            predictedMovie['rating'].toFixed(2) +
+                                          "</span>" +
+                                          predictedMovie['movieName'] +
+                                       "</li>" +
+                                    "</ul>");
         $("#predictedMovie").delay(9000).fadeOut('slow');
       }
     }); /* ajax */
@@ -326,26 +349,37 @@ var PredictMovieRating = React.createClass({
   render: function() {
     return (
       <div>
+        <center>
+          <div>
+              <b>
+                Predict Rating
+              </b>
+          </div>
 
-        <Autocomplete
-          placeholder={ this.props.autocompletePlaceholder }
-          data={ this.props.autocompleteData }
-          onSelect={ this.changeInputMovieName } />
+          <br />
 
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <FlatButton
-            label="Submit"
-            primary={ true }
-            onTouchTap={ this.handleSubmit }
-            style={{
-              position: 'static',
-              margin: '0 auto'
-            }} />
-        </MuiThemeProvider>
+          <Autocomplete
+            placeholder={ this.props.autocompletePlaceholder }
+            data={ this.props.autocompleteData }
+            onSelect={ this.changeInputMovieName } />
 
-        <img id="loadingImage2" src="../../static/images/ring-alt.gif" />
+          <MuiThemeProvider muiTheme={getMuiTheme()}>
+            <FlatButton
+              label="Submit"
+              primary={ true }
+              onTouchTap={ this.handleSubmit }
+              style={{
+                position: 'static',
+                margin: '0 auto'
+              }} />
+          </MuiThemeProvider>
+
+          <img id="loadingImage2" src="../../static/images/ring-alt.gif" />
+        </center>
+
         <br /> <br />
         <div id="predictedMovie"> </div>
+        <br /> <br /> <br /> <br /> <br /> <br />
 
       </div>
     );
@@ -368,11 +402,12 @@ var Content = React.createClass({
 
           <Center>
             <div id="information">
-
+              <center>
               <RateMovie
                 autocompletePlaceholder="Enter a movie title..."
                 autocompleteData={ gMoviesName }
                 starCount={ 10 } />
+              </center>
 
               <br />
               <BestRecommendations />
@@ -381,7 +416,6 @@ var Content = React.createClass({
               <PredictMovieRating
                 autocompletePlaceholder="Enter a movie title..."
                 autocompleteData={ gMoviesName } />
-
             </div>
           </Center>
 
