@@ -406,7 +406,7 @@ var Content = React.createClass({
               <RateMovie
                 autocompletePlaceholder="Enter a movie title..."
                 autocompleteData={ gMoviesName }
-                starCount={ 10 } />
+                starCount={ 5 } />
               </center>
 
               <br />
