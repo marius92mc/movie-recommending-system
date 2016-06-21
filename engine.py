@@ -123,6 +123,9 @@ class RecommendationEngine:
             predicted_rating_rdd.join(self.movies_titles_rdd).join(self.movies_rating_counts_rdd)
         predicted_rating_title_and_count_rdd = \
             predicted_rating_title_and_count_rdd.map(lambda r: (r[1][0][1], r[1][0][0], r[1][1]))
+
+        predicted_rating_title_and_count_rdd = \
+            predicted_rating_title_and_count_rdd.filter(lambda r: (r[1] >= 1 and r[1] <= 5))
         
         return predicted_rating_title_and_count_rdd
 
