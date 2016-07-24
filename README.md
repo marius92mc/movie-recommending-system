@@ -1,6 +1,18 @@
 # Movie Recommending System using Spark
 
-TODO description
+This platform provides a web platform for recommending movies to users that 
+log in with their Facebook account. They rate movies and receive recommendations based 
+on their activity. They also receive a predicted rating for particular movies. 
+
+Technologies used: 
+
+- Apache Spark
+- Flask, Python based web framework 
+- PostgreSQL
+- React
+- jQuery, Ajax
+- Bootstrap
+
 
 ## Requirements and installation
 
