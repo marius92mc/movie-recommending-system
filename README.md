@@ -1,6 +1,6 @@
 # Movie Recommending System using Spark
 
-This platform provides a web platform for recommending movies to users that 
+A web platform for recommending movies to users that 
 log in with their Facebook account. They rate movies and receive recommendations based 
 on their activity. They also receive a predicted rating for particular movies. 
 
