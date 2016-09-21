@@ -7,7 +7,7 @@ on their activity. They also receive a predicted rating for particular movies.
 Technologies used: 
 
 - Apache Spark
-- Flask, Python based web framework 
+- Flask - Python based web framework 
 - PostgreSQL
 - React
 - jQuery, Ajax
