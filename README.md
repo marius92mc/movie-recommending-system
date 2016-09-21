@@ -170,7 +170,7 @@ port 5434.
 Change it from the same file if it is busy.
 ### 3. <b>Operations on the constructed model</b>
 
-Go to [http://0.0.0.0:5434/](http://0.0.0.0:5434/) and and have fun.
+Go to [http://0.0.0.0:5434/](http://0.0.0.0:5434/) and have <b>fun</b>. :fireworks:
 
 Or interact with the constructed ML model via terminal with the following commands.
 
