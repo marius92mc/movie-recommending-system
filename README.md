@@ -240,4 +240,5 @@ user_id for movie_id.
 TODO
 
 ## License
-TODO
+MIT
+
